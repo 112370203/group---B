@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Edit note content</h2>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  <p>
+    {{ form.title.label_tag }}<br>
+    {{ form.title }}
+  </p>
+
+  <p>
+    {{ form.content.label_tag }}<br>
+    {{ form.content }}
+  </p>
+
+  {% if note.image %}
+    <p>Current pictures:</p>
+    <img src="{{ note.image.url }}" alt="Note Image" style="max-width: 300px;" />
+  {% endif %}
+
+  <p>
+    {{ form.image.label_tag }}<br>
+    {{ form.image }}
+  </p>
+
+  <button type="submit">Save changes</button>
+  <a href="{% url 'topic_list' %}" style="margin-left:10px;">Cancel</a>
+</form>
+{% endblock %}

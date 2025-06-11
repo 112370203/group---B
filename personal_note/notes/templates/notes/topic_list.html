@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Learning Notebook</h1>
+
+<!-- 搜尋欄 -->
+<form method="get" action="{% url 'topic_list' %}" class="mb-6">
+  <input type="text" name="q" placeholder="Search topic..." value="{{ request.GET.q }}" 
+         class="p-2 rounded border w-64">
+  <button type="submit" class="ml-2 bg-blue-500 text-white px-4 py-2 rounded">search</button>
+</form>
+
+<!-- 新增按鈕 -->
+<div class="mb-4 text-right">
+  <a href="{% url 'topic_create' %}" class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded shadow">
+    Add topic
+  </a>
+  <a href="{% url 'trash_list' %}" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded shadow">garbage can</a>
+</div>
+
+
+<!-- 顯示主題卡片 -->
+{% if topics %}
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    {% for topic in topics %}
+      <!--<div class="bg-gradient-to-br from-gray-400 to-indigo-500 text-white p-4 rounded-xl shadow-md">-->
+      <div class="bg-gradient-to-br from-gray-300 to-indigo-500 text-white p-4 rounded-xl shadow-md">
+        <h3 class="text-lg font-bold">{{ topic.name }}</h3>
+        <p class="text-sm mt-1">Note {{ topic.note_items.count }}</p>
+        <p class="text-xs mt-1">Built on: {{ topic.created_at|date:"Y-m-d H:i" }}</p>
+        <p style="font-size: 14px; color: rgb(252, 251, 251);">
+          last editor： {{ user.username }}
+        </p>
+
+        <div class="flex justify-end space-x-2 mt-4">
+          <a href="{% url 'topic_detail' topic.id %}" 
+             class="bg-white text-indigo-600 text-sm px-3 py-1 rounded hover:bg-indigo-100">
+            edit
+          </a>
+          <a href="{% url 'topic_delete' topic.id %}" 
+             class="bg-white text-red-600 text-sm px-3 py-1 rounded hover:bg-red-100">
+            delete
+          </a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p class="text-gray-500 mt-4">Topic not found</p>
+{% endif %}
+{% endblock %}
+

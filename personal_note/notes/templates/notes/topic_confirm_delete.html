@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-6 rounded shadow">
+  <h2 class="text-xl font-bold mb-4">delete topic</h2>
+  <p class="mb-4">Are you sure you want to delete the 「<strong>{{ topic.name }}</strong>」topic?</p>
+  <form method="POST">
+    {% csrf_token %}
+    <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded">Confirm deletion</button>
+    <a href="{% url 'topic_list' %}" class="ml-4 text-sm underline text-gray-600">Cancel</a>
+  </form>
+</div>
+{% endblock %}

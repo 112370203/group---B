@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ topic.name }} - Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2rem;
+            background-color: #f0f8ff;
+        }
+        .note-item {
+            background: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 10px 0;
+            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+        }
+        .note-item img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 8px;
+        }
+        .note-actions {
+            margin-top: 10px;
+        }
+        .note-actions a {
+            margin-right: 10px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .note-actions a:hover {
+            text-decoration: underline;
+        }
+        .share-form {
+            margin-top: 20px;
+            background: #e0f7fa;
+            padding: 12px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>{{ topic.name }}</h1>
+    <p>Setup time：{{ topic.created_at }}</p>
+
+    <hr>
+
+    <h2>Note content</h2>
+    {% for item in note_items %}
+        <div class="note-item">
+            {% if item.content %}
+                <p>{{ item.title }}</p>
+                <p>Setup time：{{ topic.created_at }}</p>
+                <p>last editor：{{ user.username }}</p>
+                <!--<p>{{ item.content }}</p>-->
+            {% endif %}
+            <!--{% if item.image %}
+                <img src="{{ item.image.url }}" alt="圖片">
+            {% endif %}
+            {% if item.photo %}
+                <img src="{{ item.photo.url }}" alt="圖片" class="note-image">
+            {% endif %}-->
+
+            <div class="note-actions">
+                <a href="{% url 'edit_note_item' item.id %}">edit</a>
+                <a href="{% url 'delete_note_item' topic.id item.id %}">delete</a>    
+            </div>
+        </div>
+    {% empty %}
+        <p>There are currently no note items.</p>
+    {% endfor %}
+
+    <hr>
+
+    <h2>Add note</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">add</button>
+    </form>
+
+    <hr>
+
+    <h2>share topic</h2>
+    <div class="share-form">
+        <form method="post" action="{% url 'share_topic' topic.id %}">
+            {% csrf_token %}
+            {{ share_form.email.label_tag }} {{ share_form.email }}
+            <button type="submit">share</button>
+        </form>
+        {% if shared_users %}
+            <p>Shared with:</p>
+            <ul>
+                {% for user in shared_users %}
+                    <li>{{ user.username }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+    <br>
+    <a href="{% url 'topic_list' %}">Return to topic list</a>
+
+</body>
+</html>
+

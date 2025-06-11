@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white p-6 rounded shadow">
+  <h2 class="text-2xl font-bold mb-4">Delete record</h2>
+  {% if topics %}
+    <ul class="list-disc pl-5 space-y-1">
+      {% for topic in topics %}
+        <li class="flex justify-between items-center">
+          <span>{{ topic.name }}</span>
+          <a href="{% url 'topic_restore' topic.id %}" class="bg-blue-500 text-white py-2 px-4 rounded shadow">Restore</a>
+          <a href="{% url 'topic_list' %}" class="bg-yellow-500 text-white py-2 px-4 rounded shadow">
+            Return to list
+          </a>
+          <!--<a href="{% url 'trash_list' %}" class="bg-gray-500 text-white py-2 px-4 rounded shadow">
+            查看曾刪除過的筆記
+          </a>-->
+
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="text-gray-600">The trash can is currently empty.</p>
+    <div class="mb-4 text-right">
+      <a href="{% url 'topic_list' %}" class="bg-yellow-500 text-white py-2 px-4 rounded shadow">
+        Return to list
+      </a>
+            <a href="{% url 'trash_list' %}" class="bg-gray-500 text-white py-2 px-4 rounded shadow">
+        View deleted notes
+      </a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
